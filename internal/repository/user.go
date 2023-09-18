@@ -13,12 +13,12 @@ type userRepository struct {
 }
 
 func NewUser(con *sql.DB) domain.UserRepository {
-	return userRepository{
-		goqu.New("default", con),
+	return &userRepository{
+		goqu.New("postgres", con),
 	}
 }
 
-func (u userRepository) FindByID(ctx context.Context, id int) (user domain.User, err error) {
+func (u userRepository) FindByID(ctx context.Context, id int64) (user domain.User, err error) {
 	dataset := u.db.From("users").Where(goqu.Ex{
 		"id": id,
 	})

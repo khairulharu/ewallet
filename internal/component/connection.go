@@ -9,26 +9,29 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewDatabase(con *config.Config) *sql.DB {
-	dsn := fmt.Sprintf(
+func GetDatabaseConnection(cnf *config.Config) *sql.DB {
+	dsn := fmt.Sprintf(""+
 		"host=%s "+
-			"port=%s "+
-			"user=%s "+
-			"password=%s "+
-			"dbname=%s "+
-			"sslmode=disable",
-		con.DB.Host,
-		con.DB.Port,
-		con.DB.User,
-		con.DB.Pass,
-		con.DB.Name,
+		"port=%s "+
+		"user=%s "+
+		"password=%s "+
+		"dbname=%s "+
+		"sslmode=disable",
+		cnf.Database.Host,
+		cnf.Database.Port,
+		cnf.Database.User,
+		cnf.Database.Pass,
+		cnf.Database.Name,
 	)
 
 	database, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatalf("error when connect to database: %s", err.Error())
 	}
-	log.Fatal("database connect")
+	err = database.Ping()
+	if err != nil {
+		log.Fatalf("error when connect to database: %s", err.Error())
+	}
 	return database
 
 }
