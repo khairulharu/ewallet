@@ -25,5 +25,15 @@ func Get() *Config {
 			Pass: os.Getenv("DATABASE_PASS"),
 			Name: os.Getenv("DATABASE_NAME"),
 		},
+		Email{
+			Host: os.Getenv("MAIL_HOST"),
+			Port: os.Getenv("MAIL_PORT"),
+			User: os.Getenv("MAIL_USER"),
+			Pass: os.Getenv("MAIL_PASS"),
+		},
+		Redis{
+			Addr: os.Getenv("REDIS_ADDR"),
+			Pass: os.Getenv("REDIS_PASS"),
+		},
 	}
 }
