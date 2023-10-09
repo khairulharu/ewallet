@@ -44,6 +44,7 @@ func main() {
 	api.NewTransfer(app, transactionService, authMid)
 	api.NewNotification(app, authMid, notificationService)
 	api.NewTopUp(app, authMid, topupService)
+	api.NewMidtrans(app, midtransService, topupService)
 
 	sse.NewNotification(app, authMid, hub)
 
