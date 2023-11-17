@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/khairulharu/ewallet/domain"
@@ -11,18 +12,24 @@ import (
 )
 
 type topupService struct {
-	notificationService domain.NotificationService
-	midtransService     domain.MidtransService
-	topUpRepository     domain.TopupRepository
-	accountRepository   domain.AccountRepository
+	notificationService   domain.NotificationService
+	midtransService       domain.MidtransService
+	topUpRepository       domain.TopupRepository
+	accountRepository     domain.AccountRepository
+	transactionRepository domain.TransactionRepository
 }
 
-func NewTopup(notificationService domain.NotificationService, midatransService domain.MidtransService, topUpRepository domain.TopupRepository, accountRepository domain.AccountRepository) domain.TopupService {
+func NewTopup(notificationService domain.NotificationService,
+	midatransService domain.MidtransService,
+	topUpRepository domain.TopupRepository,
+	accountRepository domain.AccountRepository,
+	transactionRepository domain.TransactionRepository) domain.TopupService {
 	return &topupService{
-		notificationService: notificationService,
-		midtransService:     midatransService,
-		topUpRepository:     topUpRepository,
-		accountRepository:   accountRepository,
+		notificationService:   notificationService,
+		midtransService:       midatransService,
+		topUpRepository:       topUpRepository,
+		accountRepository:     accountRepository,
+		transactionRepository: transactionRepository,
 	}
 }
 
@@ -66,6 +73,18 @@ func (t topupService) ConfirmedTopup(ctx context.Context, id string) error {
 
 	if account == (domain.Account{}) {
 		return domain.ErrAccountNotFound
+	}
+
+	err = t.transactionRepository.Insert(ctx, &domain.Transaction{
+		AccountId:           account.ID,
+		SofNumber:           "00",
+		DofNumber:           account.AccountNumber,
+		TransactionType:     "C",
+		Amount:              topUp.Amount,
+		TransactionDatetime: time.Now(),
+	})
+	if err != nil {
+		return err
 	}
 
 	account.Balance += topUp.Amount

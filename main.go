@@ -34,7 +34,7 @@ func main() {
 	userService := service.NewUser(userRepository, cacheConnection, emailService)
 	transactionService := service.NewTransaction(accontRepository, transactionRepository, cacheConnection, notificationService)
 	midtransService := service.NewMidtrans(config)
-	topupService := service.NewTopup(notificationService, midtransService, topUpRepository, accontRepository)
+	topupService := service.NewTopup(notificationService, midtransService, topUpRepository, accontRepository, transactionRepository)
 
 	authMid := middleware.Authenticate(userService)
 	app := fiber.New()
