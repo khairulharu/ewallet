@@ -30,4 +30,5 @@ func (f factorService) ValidatePIN(ctx context.Context, req dto.ValidatePinReq) 
 		return domain.ErrValidatePin
 	}
 
+	return nil
 }
