@@ -15,3 +15,5 @@ var ErrInquiryNotFound = errors.New("inquiry not found")
 var ErrInsuficientBalance = errors.New("insufisiencet balance")
 
 var ErrTransferAccount = errors.New("cannot transfer to your account self")
+
+var ErrValidatePin = errors.New("pin is invalid")
