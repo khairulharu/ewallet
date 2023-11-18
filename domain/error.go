@@ -17,3 +17,5 @@ var ErrInsuficientBalance = errors.New("insufisiencet balance")
 var ErrTransferAccount = errors.New("cannot transfer to your account self")
 
 var ErrValidatePin = errors.New("pin is invalid")
+
+var ErrInvalidPin = errors.New("pin is invalid operation")

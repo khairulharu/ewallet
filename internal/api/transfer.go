@@ -9,11 +9,13 @@ import (
 
 type transferApi struct {
 	transactionService domain.TransactionService
+	factorService      domain.FactorService
 }
 
-func NewTransfer(app *fiber.App, transactionService domain.TransactionService, authMid fiber.Handler) {
+func NewTransfer(app *fiber.App, transactionService domain.TransactionService, authMid fiber.Handler, factorService domain.FactorService) {
 	h := transferApi{
 		transactionService: transactionService,
+		factorService:      factorService,
 	}
 
 	app.Post("transfer/inquiry", authMid, h.TransferInquiry)
@@ -38,9 +40,19 @@ func (t transferApi) TransferInquiry(ctx *fiber.Ctx) error {
 
 func (t transferApi) TransferExecute(ctx *fiber.Ctx) error {
 	var req dto.TransferExecuteReq
-
 	if err := ctx.BodyParser(&req); err != nil {
 		return ctx.Status(400).JSON(err.Error())
+	}
+
+	user := ctx.Locals("x-user").(dto.UserData)
+
+	if err := t.factorService.ValidatePIN(ctx.Context(), dto.ValidatePinReq{
+		PIN:    req.PIN,
+		UserID: user.ID,
+	}); err != nil {
+		return ctx.Status(util.GetHttpStatus(err)).JSON(dto.Response{
+			Message: err.Error(),
+		})
 	}
 
 	err := t.transactionService.TransferExecute(ctx.Context(), req)

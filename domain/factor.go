@@ -13,9 +13,11 @@ type Factor struct {
 }
 
 type FactorRepository interface {
+	Insert(ctx context.Context, factor *Factor) error
 	FindByUser(ctx context.Context, id int64) (Factor, error)
 }
 
 type FactorService interface {
+	CreatePIN(ctx context.Context, req dto.Factor) error
 	ValidatePIN(ctx context.Context, req dto.ValidatePinReq) error
 }

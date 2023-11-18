@@ -14,6 +14,10 @@ func GetHttpStatus(err error) int {
 		return 400
 	case errors.Is(err, domain.ErrOtpInvalid):
 		return 400
+	case errors.Is(err, domain.ErrValidatePin):
+		return 400
+	case errors.Is(err, domain.ErrInvalidPin):
+		return 400
 	default:
 		return 500
 	}

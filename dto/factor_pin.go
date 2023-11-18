@@ -1,6 +1,6 @@
 package dto
 
-type ValidatePinReq struct {
+type Factor struct {
 	PIN    string
 	UserID int64
 }
