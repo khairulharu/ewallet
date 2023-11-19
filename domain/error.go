@@ -19,3 +19,5 @@ var ErrTransferAccount = errors.New("cannot transfer to your account self")
 var ErrValidatePin = errors.New("pin is invalid")
 
 var ErrInvalidPin = errors.New("pin is invalid operation")
+
+var ErrCreateAccountInvalid = errors.New("error when create account")

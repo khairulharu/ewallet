@@ -37,6 +37,7 @@ func main() {
 	midtransService := service.NewMidtrans(config)
 	topupService := service.NewTopup(notificationService, midtransService, topUpRepository, accontRepository, transactionRepository)
 	factorService := service.NewFactor(factorRepository)
+	accountService := service.NewAccount(accontRepository)
 
 	authMid := middleware.Authenticate(userService)
 	app := fiber.New()
@@ -47,6 +48,7 @@ func main() {
 	api.NewNotification(app, authMid, notificationService)
 	api.NewTopUp(app, authMid, topupService)
 	api.NewMidtrans(app, midtransService, topupService)
+	api.NewAccount(app, authMid, accountService)
 
 	sse.NewNotification(app, authMid, hub)
 
