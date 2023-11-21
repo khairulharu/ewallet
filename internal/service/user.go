@@ -46,7 +46,8 @@ func (u userService) Authenticate(ctx context.Context, req dto.AuthReq) (dto.Aut
 	userJson, _ := json.Marshal(user)
 	_ = u.cacheRepository.Set("user:"+token, userJson)
 	return dto.AuthRes{
-		Token: token,
+		Token:  token,
+		UserID: user.ID,
 	}, nil
 
 }
@@ -97,6 +98,10 @@ func (u userService) Register(ctx context.Context, req dto.UserRegisterReq) (dto
 	referenceId := util.GenerateRandomString(16)
 
 	log.Println("your otp code: ", otpCode)
+	// this code has disbale
+	// if err := u.emailService.Send(req.Email, "otp code brudaa", otpCode); err != nil {
+	// 	return dto.UserRegisterRes{}, err
+	// }
 	_ = u.cacheRepository.Set("otp:"+referenceId, []byte(otpCode))
 	_ = u.cacheRepository.Set("user-ref:"+referenceId, []byte(user.Username))
 	return dto.UserRegisterRes{

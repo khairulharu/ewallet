@@ -72,6 +72,7 @@ func (m midtransService) VerifyPayment(ctx context.Context, orderId string) (boo
 				// TODO set transaction status on your databaase to 'failure'
 			} else if transactionStatusResp.TransactionStatus == "pending" {
 				// TODO set transaction status on your databaase to 'pending' / waiting payment
+				return true, nil
 			}
 		}
 	}
